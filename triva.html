@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>JS Bin</title>
+    <script src="https://code.jquery.com/jquery-3.1.0.js"></script>
+    <script>
+        $.get("https://opentdb.com/api.php?amount=10&type=multiple", displayName)
+    function makeButton(str, arr) {
+        var quest = document.createElement('P');
+        var ion = document.createTextNode(str);
+        quest.appendChild(ion);
+        document.getElementById("top").appendChild(quest);
+        for (var x = 0; x<arr.length; x++) {
+        quest = document.createElement('P');
+        quest.setAttribute('id', arr[x]);
+        ion = document.createTextNode(str);
+        ion = document.createTextNode(arr[x]);
+        quest.appendChild(ion);
+        document.getElementById("top").appendChild(quest);
+        }
+        //document.getelementById("top").appendChild(ion);
+    }
+
+    function displayName(data) {
+    var answers = [];
+    for (var i = 0; i < data.results.length; i++) {
+        //console.log(data.results[i]);
+        console.log(data.results[i].question);
+        for(var ans in data.results[i].incorrect_answers) {
+            answers.push(data.results[i].incorrect_answers[ans]);
+        }
+        var x = Math.floor(Math.random()*5);
+        answers.splice(x, 0, data.results[i].correct_answer);
+        console.log(answers);
+        makeButton(data.results[i].question, answers);
+        answers = [];      
+    }
+    }
+  </script>
+</head>
+<body>
+    <div id="top" style="text-align:center">
+      <h2>Quiz</h2>
+    </div>
+</body>
+</html>
