@@ -4,41 +4,64 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width">
   <title>JS Bin</title>
+    <style>
+        input {border:none};
+    </style>
     <script src="https://code.jquery.com/jquery-3.1.0.js"></script>
     <script>
-        $.get("https://opentdb.com/api.php?amount=10&type=multiple", displayName)
+        $.get("https://opentdb.com/api.php?amount=10&type=multiple", main)
     function makeButton(str, arr) {
         var quest = document.createElement('P');
         var ion = document.createTextNode(str);
         quest.appendChild(ion);
         document.getElementById("top").appendChild(quest);
         for (var x = 0; x<arr.length; x++) {
-        quest = document.createElement('P');
+        quest = document.createElement('input');
+        quest.setAttribute('id', arr[x]);
+        quest.type = "button";
+        quest.value = arr[x];
         quest.setAttribute('id', arr[x]);
         ion = document.createTextNode(str);
         ion = document.createTextNode(arr[x]);
         quest.appendChild(ion);
         document.getElementById("top").appendChild(quest);
         }
-        //document.getelementById("top").appendChild(ion);
     }
 
     function displayName(data) {
     var answers = [];
     for (var i = 0; i < data.results.length; i++) {
-        //console.log(data.results[i]);
-        console.log(data.results[i].question);
         for(var ans in data.results[i].incorrect_answers) {
             answers.push(data.results[i].incorrect_answers[ans]);
         }
         var x = Math.floor(Math.random()*5);
         answers.splice(x, 0, data.results[i].correct_answer);
-        console.log(answers);
         makeButton(data.results[i].question, answers);
         answers = [];      
+        }
     }
+
+    function clearWrong(arg, data) {
+        for (var i = 0; i < data.results.length; i++) {
+            if (arg == data.results[i].correct_answer) {
+                for (var j = 0; j < data.results[i].incorrect_answers.length; j++) {
+                    var element = document.getElementById(data.results[i].incorrect_answers[j]);
+                    element.parentNode.removeChild(element);
+                }
+            }
+        }
     }
-  </script>
+
+    function main(data) {
+        displayName(data);
+        //x=data.results[0].incorrect_answers[0];
+        //console.log(x);
+        $('input').click(function() {
+            console.log(this.id);
+            clearWrong(this.id, data);
+        });
+    }
+    </script>
 </head>
 <body>
     <div id="top" style="text-align:center">
